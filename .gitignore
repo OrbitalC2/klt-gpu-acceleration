@@ -1,0 +1,15 @@
+*.o
+*.o_cpu
+*.a
+example[1-5]
+example3_*
+example3_prof
+gmon.out
+*.ppm
+features.txt
+features.ft
+*.nsys-rep
+*.sqlite
+klt_dataset/
+__pycache__/
+.DS_Store
