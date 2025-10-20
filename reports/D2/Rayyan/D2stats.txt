@@ -1,0 +1,19 @@
+========================================
+GPU Timing Statistics (Accumulated)
+========================================
+Total kernel time: 103.007 ms
+Total _KLTComputeGradients time: 1724.507 ms (549 calls)
+Total _KLTComputeSmoothedImage time: 1551.100 ms (549 calls)
+Total GPU time: 3275.606 ms
+Memory/overhead time: 3172.600 ms
+========================================
+
+========================================
+CPU Timing Statistics (Accumulated)
+========================================
+Total convolution time: 29277.755 ms
+Total _KLTComputeGradients time: 11064.987 ms (549 calls)
+Total _KLTComputeSmoothedImage time: 18216.125 ms (549 calls)
+Total CPU time: 29281.112 ms
+Memory/overhead time: 3.357 ms
+========================================

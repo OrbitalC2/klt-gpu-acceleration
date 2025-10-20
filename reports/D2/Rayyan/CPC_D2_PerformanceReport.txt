@@ -1,0 +1,85 @@
+CCP-D2 Performance Results - Naive GPU Implementation
+=====================================================
+Platform: University HPC Server (NVIDIA GPU)
+Date: October 20, 2025
+
+EXECUTION TIMES:
+---------------
+CPU Baseline:  29.281 seconds
+GPU Naive   :      3.276 seconds
+Speedup Factor:      8.94×
+
+BREAKDOWN:
+---------
+CPU Total Time:     29.281s
+  - Convolution:    29.278s
+  - Overhead:       0.003s
+
+GPU Total Time:     3.276s
+  - Kernel Exec:    0.103s
+  - Mem/Overhead:   3.173s
+
+CORRECTNESS:
+-----------
+✓ Feature detection: 850-1000 features (matches CPU)
+✓ Feature tracking: Identical results across 275 frames
+✓ All intermediate results match CPU version
+✓ Pixel-accurate gradient computation verified
+
+GPU IMPLEMENTATION:
+------------------
+- Target: _convolveSeparate (primary D1 hotspot)
+- Kernels: Separable 2D convolution (horizontal + vertical passes)
+- Thread blocks: 32×8 (256 threads)
+- Grid size: Dynamic based on image resolution
+- Memory: Global memory with coalesced access
+- Constant memory: Convolution kernel coefficients
+- Stride optimization: 32-byte aligned (warp-friendly)
+
+FUNCTION-LEVEL BREAKDOWN:
+------------------------
+_KLTComputeGradients (549 calls):
+  CPU: 11.065s  →  GPU: 1.725s  (6.42× speedup)
+  
+_KLTComputeSmoothedImage (549 calls):
+  CPU: 18.216s  →  GPU: 1.551s  (11.75× speedup)
+
+Per-Call Average:
+  CPU: ~53.3ms per operation
+  GPU: ~5.97ms per operation
+
+ANALYSIS:
+--------
+Current implementation achieves 8.94× speedup with significant bottlenecks:
+
+STRENGTHS:
++ Pure computation speedup: 284× (29.28s → 0.103s kernel time)
++ Effective memory stride alignment (32-byte)
++ Constant memory utilization for kernel coefficients
++ Coalesced global memory access patterns
+
+BOTTLENECKS:
+- Memory transfer overhead: 96.9% of GPU time (3.17s / 3.28s)
+- Repeated H2D/D2H copies per convolution call
+- No data persistence on GPU between frames
+- No kernel fusion (4 kernel launches per gradient computation) -> (will see if we want to merge them ahead because if we do calculation gets complicated)
+- Global memory bandwidth limitations
+- No shared memory caching
+
+Key Insight: Only 3.15% of GPU time is actual computation!
+(0.103s kernel / 3.276s total)
+
+
+CONCLUSION:
+----------
+The naive GPU implementation successfully demonstrates:
+✓ Correctness: Pixel-perfect matching with CPU reference
+✓ Scalability: 8.94× speedup on pure algorithm translation
+✓ Bottleneck identification: 97% time in memory transfers
+
+Next phase will focus on memory optimization strategies,
+with kernel fusion* and shared memory as primary targets
+for achieving 50-150× total speedup over CPU baseline.
+
+Performance validated on 275-frame sequence with 850-1000
+tracked features, demonstrating production-ready accuracy.

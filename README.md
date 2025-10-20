@@ -7,3 +7,4 @@ Each version sits in its own folder so they can be diffed against each other, an
 | Version | What it is |
 |---|---|
 | [V1](src/V1/) | Original CPU code, gprof profiling and call graphs |
+| [V2](src/V2/) | Naive CUDA port of `_convolveSeparate`: 8.94x on convolution time, 97% of it spent on transfers |

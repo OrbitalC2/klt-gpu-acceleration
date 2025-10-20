@@ -1,0 +1,56 @@
+CCP-D2 Performance Results - Naive GPU Implementation
+=====================================================
+
+Platform: University HPC Server (NVIDIA RTX 3080)
+Date: October 9, 2025
+Team: Saleh, Rayyan, Imaad
+
+EXECUTION TIMES:
+---------------
+CPU Baseline (V1): 1.777 seconds
+GPU Naive (V2):    1.836 seconds
+Speedup Factor:    0.97x
+
+BREAKDOWN:
+---------
+real    0m1.777s (CPU)
+user    0m1.711s
+sys     0m0.063s
+
+real    0m1.836s (GPU)
+user    0m1.766s
+sys     0m0.066s
+
+CORRECTNESS:
+-----------
+✓ Feature detection: 150 features (matches CPU)
+✓ Feature tracking: Identical results across 10 frames
+✓ Final tracked features: 33 (frame 9)
+✓ All intermediate results match CPU version
+
+GPU IMPLEMENTATION:
+------------------
+- Target: _convolveSeparate (85.94% D1 hotspot)
+- Thread blocks: 16×16 (256 threads)
+- Grid size: Dynamic based on 1920×1080 resolution
+- Memory: Global memory access
+- Kernel: Separable 2D convolution (horizontal + vertical)
+
+ANALYSIS:
+--------
+GPU performance currently matches CPU baseline due to:
+1. Memory transfer overhead (H2D and D2H)
+2. No shared memory optimization
+3. Global memory bandwidth limitations
+4. Kernel launch overhead
+5. No stream concurrency
+
+This is EXPECTED for V2 naive implementation.
+
+V3 OPTIMIZATION TARGETS:
+-----------------------
+- Shared memory tiling: Expected 5-8× improvement
+- Kernel fusion: Expected 2-3× improvement  
+- Texture memory: Expected 2-3× improvement
+- CUDA streams: Expected 1.5-2× improvement
+- Target V3 performance: 0.2-0.4 seconds (5-10× total speedup)

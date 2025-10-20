@@ -1,0 +1,25 @@
+KLT Tracking Performance Summary
+-------------------------------------
+
+Category                        | CPU (example3_cpu)                                    | GPU (example3_gpu)
+--------------------------------------------------------------------------------------------------------------
+Executable Link Command          | gcc -O2 -Wall -g -o example3_cpu ... -lm              | (GPU-linked executable, command not shown)
+Initial Image Size               | 1920 × 1080                                           | 1920 × 1080
+Initial Features Selected        | 150                                                   | 150
+Tracking Sequence Results        | 150 → 17 → 12 → 12 → 12 → 2 → 0 → 0 → 0               | 150 → 17 → 12 → 12 → 12 → 2 → 0 → 0 → 0
+Feature Output Files             | feat0.ppm → feat8.ppm                                 | feat0.ppm → feat8.ppm
+Error                            | (KLTTrackFeatures) Size mismatch at final step        | (KLTTrackFeatures) Size mismatch at final step
+Exit Status                      | Non-zero (error 1)                                    | Non-zero (error 1)
+Performance (time)               | User: 1.66s  System: 0.06s  Elapsed: 1.73s  CPU: 99%  | User: 1.65s  System: 0.08s  Elapsed: 1.73s  CPU: 99%
+Memory Usage                     | 90,336 KB max resident                                | 91,044 KB max resident
+I/O Summary                      | 0 inputs, 109,368 outputs                             | 0 inputs, 109,368 outputs
+Page Faults (minor)              | 37,930                                                | 37,968
+Swaps                            | 0                                                     | 0
+Make Error Line                  | [Makefile:74: run_cpu]                                | [Makefile:71: run]
+
+-------------------------------------
+Observations:
+- Both CPU and GPU runs produced identical tracking sequences and error behavior.
+- Execution time was effectively identical (≈1.73s elapsed).
+- GPU version used slightly more memory (+708 KB).
+- Both failed due to a 320×240 image mismatch in the final step.
