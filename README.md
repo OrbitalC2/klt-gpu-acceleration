@@ -9,3 +9,4 @@ Each version sits in its own folder so they can be diffed against each other, an
 | [V1](src/V1/) | Original CPU code, gprof profiling and call graphs |
 | [V2](src/V2/) | Naive CUDA port of `_convolveSeparate`: 8.94x on convolution time, 97% of it spent on transfers |
 | [V3](src/V3/) | Shared-memory kernels, images kept on the GPU, selection and tracking ported: 31.0 s to 3.7 s |
+| [V4](src/V4/) | OpenACC port of V1 for comparison: convolution and eigenvalue scoring offloaded |
